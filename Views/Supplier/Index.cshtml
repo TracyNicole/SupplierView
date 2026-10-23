@@ -1,0 +1,321 @@
+
+@{
+    ViewData["Title"] = "Supplier Dashboard";
+}
+
+<style>
+    body {
+        background-color: #f5f6fa;
+    }
+
+    .supplier-layout {
+        display: flex;
+        min-height: 85vh;
+        margin: -16px -12px;
+        color: #252b42;
+    }
+
+    .supplier-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: #252b42;
+        color: white;
+        padding: 28px 18px;
+    }
+
+    .supplier-brand {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 0 32px 8px;
+    }
+
+    .supplier-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .supplier-nav a {
+        color: #d7d9e5;
+        text-decoration: none;
+        padding: 12px 14px;
+        border-radius: 8px;
+        display: block;
+        transition: background 0.2s ease;
+    }
+
+    .supplier-nav a.active,
+    .supplier-nav a:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .supplier-main {
+        flex: 1;
+        min-width: 0;
+        padding: 32px;
+    }
+
+    .supplier-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .supplier-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .supplier-muted {
+        color: #777e91;
+        margin: 0;
+    }
+
+    .supplier-profile {
+        background: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .supplier-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .supplier-card,
+    .supplier-panel {
+        background: white;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 3px 15px rgba(30, 35, 70, 0.04);
+    }
+
+    .supplier-stat-label {
+        color: #777e91;
+        font-size: 14px;
+        margin-bottom: 14px;
+    }
+
+    .supplier-stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .supplier-lower {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
+        gap: 22px;
+    }
+
+    .supplier-panel h2 {
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .supplier-booking {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .supplier-booking:last-child {
+        border-bottom: none;
+    }
+
+    .supplier-booking p,
+    .supplier-inquiry p {
+        margin: 5px 0 0;
+        color: #777e91;
+        font-size: 13px;
+    }
+
+    .supplier-status {
+        background: #fff2d6;
+        color: #946200;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .supplier-inquiry {
+        padding: 14px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .supplier-empty {
+        color: #777e91;
+        font-size: 14px;
+        padding: 8px 0;
+    }
+
+    @@media (max-width: 1000px) {
+        .supplier-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .supplier-lower {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .supplier-layout {
+            flex-direction: column;
+        }
+
+        .supplier-sidebar {
+            width: 100%;
+        }
+
+        .supplier-nav {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .supplier-main {
+            padding: 22px 16px;
+        }
+
+        .supplier-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .supplier-stats {
+            gap: 12px;
+        }
+
+        .supplier-card,
+        .supplier-panel {
+            padding: 16px;
+        }
+
+        .supplier-stat-value {
+            font-size: 23px;
+        }
+    }
+</style>
+
+<div class="supplier-layout">
+    <aside class="supplier-sidebar">
+        <div class="supplier-brand">Supplier Portal</div>
+
+        <nav class="supplier-nav">
+            <a asp-controller="Supplier"
+               asp-action="Index"
+               class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                Dashboard
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="Packages"
+               class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Packages" ? "active" : "")">
+                My Packages
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Services">
+                My Services
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Bookings">
+                Bookings
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Calendar">
+                Calendar
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Earnings">
+                Earnings
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Reviews">
+                Reviews
+            </a>
+
+            <a asp-controller="Supplier" asp-action="Profile">
+                Profile
+            </a>
+        </nav>
+    </aside>
+
+    <main class="supplier-main">
+        <header class="supplier-header">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p class="supplier-muted">
+                    Welcome back! Here's what's happening with your business.
+                </p>
+            </div>
+
+            <div class="supplier-profile">Supplier Account</div>
+        </header>
+
+        <section class="supplier-stats">
+            <div class="supplier-card">
+                <div class="supplier-stat-label">Total Packages</div>
+                <p class="supplier-stat-value">0</p>
+            </div>
+
+            <div class="supplier-card">
+                <div class="supplier-stat-label">Active Services</div>
+                <p class="supplier-stat-value">0</p>
+            </div>
+
+            <div class="supplier-card">
+                <div class="supplier-stat-label">Total Bookings</div>
+                <p class="supplier-stat-value">0</p>
+            </div>
+
+            <div class="supplier-card">
+                <div class="supplier-stat-label">Total Earnings</div>
+                <p class="supplier-stat-value">₱0.00</p>
+            </div>
+        </section>
+
+        <section class="supplier-lower">
+            <div class="supplier-panel">
+                <h2>Recent Bookings</h2>
+
+                <div class="supplier-booking">
+                    <div>
+                        <strong>Sample Event Booking</strong>
+                        <p>Sample customer - Event package</p>
+                    </div>
+
+                    <span class="supplier-status">Pending</span>
+                </div>
+
+                <p class="supplier-empty">
+                    This is sample data. Actual bookings will appear
+                    after the database is connected.
+                </p>
+            </div>
+
+            <div class="supplier-panel">
+                <h2>Inquiries</h2>
+
+                <div class="supplier-inquiry">
+                    <strong>Customer Inquiries</strong>
+                    <p>Customer questions and requests will appear here.</p>
+                </div>
+
+                <p class="supplier-empty">No real inquiries yet.</p>
+            </div>
+        </section>
+    </main>
+</div>

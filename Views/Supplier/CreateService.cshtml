@@ -1,0 +1,81 @@
+
+@model SupplierView.Models.Service
+
+@{
+    ViewData["Title"] = "Add Service";
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="fw-bold">Add Service</h2>
+    <p class="text-muted">
+        Enter the details of the event service you offer.
+    </p>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form asp-controller="Supplier"
+                  asp-action="CreateService"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">
+                        Service Name
+                    </label>
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="e.g. Catering, Host, Lights and Sounds" />
+                    <span asp-validation-for="Name"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">
+                        Description / Included Services
+                    </label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Describe what the service includes"></textarea>
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label">
+                        Price (₱)
+                    </label>
+                    <input asp-for="Price"
+                           type="number"
+                           step="0.01"
+                           min="0"
+                           class="form-control"
+                           placeholder="25000" />
+                    <span asp-validation-for="Price"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+                    <label asp-for="IsActive"
+                           class="form-check-label">
+                        Active Service
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Service
+                </button>
+
+                <a asp-controller="Supplier"
+                   asp-action="Services"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
