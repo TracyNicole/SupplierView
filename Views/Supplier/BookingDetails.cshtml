@@ -1,0 +1,70 @@
+
+@model SupplierView.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+    Layout = "~/Views/Supplier/_SupplierLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold" style="color: #252b42;">Booking Details</h2>
+            <p class="text-secondary">View complete booking information.</p>
+        </div>
+
+        <a asp-controller="Supplier"
+           asp-action="Bookings"
+           class="btn btn-outline-secondary">
+            Back to Bookings
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-4">Booking Information</h5>
+
+            <dl class="row">
+                <dt class="col-sm-3">Booking ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Customer Name</dt>
+                <dd class="col-sm-9">@Model.CustomerName</dd>
+
+                <dt class="col-sm-3">Event Type</dt>
+                <dd class="col-sm-9">@Model.EventType</dd>
+
+                <dt class="col-sm-3">Event Date</dt>
+                <dd class="col-sm-9">@Model.EventDate.ToString("MMMM dd, yyyy")</dd>
+
+                <dt class="col-sm-3">Package</dt>
+                <dd class="col-sm-9">@Model.PackageName</dd>
+
+                <dt class="col-sm-3">Total Price</dt>
+                <dd class="col-sm-9">₱@Model.TotalPrice.ToString("N2")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-warning text-dark">@Model.Status</span>
+                </dd>
+            </dl>
+
+            <hr />
+
+            <a asp-controller="Supplier"
+               asp-action="EditBooking"
+               asp-route-id="@Model.Id"
+               class="btn text-white"
+               style="background-color: #6c63ff;">
+                Edit Booking
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="UpdateBookingStatus"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-success">
+                Update Status
+            </a>
+        </div>
+    </div>
+</div>

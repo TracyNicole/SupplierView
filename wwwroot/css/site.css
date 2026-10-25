@@ -1,31 +1,119 @@
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f5f6fa;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* SUPPLIER PORTAL LAYOUT */
+
+.supplier-layout {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    color: #252b42;
+    align-items: stretch;
+}
+
+.supplier-sidebar {
+    width: 260px;
+    flex: 0 0 260px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background-color: #252b42;
+    color: white;
+    padding: 28px 18px;
+}
+
+.supplier-brand {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 32px 8px;
+}
+
+.supplier-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.supplier-nav a {
+    display: block;
+    color: #d7d9e5;
+    text-decoration: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.supplier-nav a:hover,
+.supplier-nav a.active {
+    background-color: #6c63ff;
+    color: white;
+}
+
+.supplier-main {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 32px;
+}
+
+/* RESPONSIVE LAYOUT */
+
+@media (max-width: 650px) {
+    .supplier-layout {
+        flex-direction: column;
+    }
+
+    .supplier-sidebar {
+        width: 100%;
+        flex: none;
+        min-height: auto;
+        padding: 20px 16px;
+    }
+
+    .supplier-brand {
+        margin-bottom: 20px;
+    }
+
+    .supplier-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .supplier-main {
+        padding: 20px;
+    }
 }

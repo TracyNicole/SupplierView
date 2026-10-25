@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Supplier Portal</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    @{
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    }
+
+    <div class="supplier-layout">
+        <aside class="supplier-sidebar">
+            <div class="supplier-brand">Supplier Portal</div>
+
+            <nav class="supplier-nav">
+                <a asp-controller="Supplier"
+                   asp-action="Index"
+                   class="@(currentAction == "Index" ? "active" : "")">
+                    Dashboard
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Packages"
+                   class="@(currentAction == "Packages" ||
+                            currentAction == "CreatePackage" ||
+                            currentAction == "EditPackage" ? "active" : "")">
+                    My Packages
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Services"
+                   class="@(currentAction == "Services" ||
+                            currentAction == "CreateService" ||
+                            currentAction == "EditService" ? "active" : "")">
+                    My Services
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Bookings"
+                   class="@(currentAction == "Bookings" ||
+                            currentAction == "BookingDetails" ||
+                            currentAction == "EditBooking" ||
+                            currentAction == "UpdateBookingStatus" ? "active" : "")">
+                    Bookings
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Calendar"
+                   class="@(currentAction == "Calendar" ? "active" : "")">
+                    Calendar
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Earnings"
+                   class="@(currentAction == "Earnings" ? "active" : "")">
+                    Earnings
+                </a>
+
+                <a asp-controller="Supplier"
+                   asp-action="Profile"
+                   class="@(currentAction == "Profile" ? "active" : "")">
+                    Profile
+                </a>
+            </nav>
+        </aside>
+
+        <main class="supplier-main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

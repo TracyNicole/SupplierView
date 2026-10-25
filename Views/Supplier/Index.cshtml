@@ -1,72 +1,32 @@
 
+@using SupplierView.Models
+
 @{
     ViewData["Title"] = "Supplier Dashboard";
+    Layout = "~/Views/Supplier/_SupplierLayout.cshtml";
+
+    var recentBookings = ViewBag.RecentBookings as List<Booking>
+        ?? new List<Booking>();
+
+    decimal totalEarnings = ViewBag.TotalEarnings is decimal earnings
+        ? earnings
+        : 0m;
 }
 
 <style>
-    body {
-        background-color: #f5f6fa;
-    }
-
-    .supplier-layout {
-        display: flex;
-        min-height: 85vh;
-        margin: -16px -12px;
-        color: #252b42;
-    }
-
-    .supplier-sidebar {
-        width: 240px;
-        flex-shrink: 0;
-        background: #252b42;
-        color: white;
-        padding: 28px 18px;
-    }
-
-    .supplier-brand {
-        font-size: 22px;
-        font-weight: 700;
-        margin: 0 0 32px 8px;
-    }
-
-    .supplier-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .supplier-nav a {
-        color: #d7d9e5;
-        text-decoration: none;
-        padding: 12px 14px;
-        border-radius: 8px;
-        display: block;
-        transition: background 0.2s ease;
-    }
-
-    .supplier-nav a.active,
-    .supplier-nav a:hover {
-        background: #6c63ff;
-        color: white;
-    }
-
-    .supplier-main {
-        flex: 1;
-        min-width: 0;
-        padding: 32px;
-    }
-
-    .supplier-header {
+    .dashboard-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
         gap: 16px;
         margin-bottom: 30px;
     }
 
-    .supplier-header h1 {
+    .dashboard-header h1 {
         font-size: 28px;
         font-weight: 700;
+        color: #252b42;
         margin-bottom: 6px;
     }
 
@@ -80,7 +40,6 @@
         padding: 10px 16px;
         border-radius: 10px;
         font-weight: 600;
-        white-space: nowrap;
     }
 
     .supplier-stats {
@@ -107,6 +66,7 @@
     .supplier-stat-value {
         font-size: 28px;
         font-weight: 700;
+        color: #252b42;
         margin: 0;
     }
 
@@ -120,46 +80,41 @@
         font-size: 19px;
         font-weight: 700;
         margin-bottom: 20px;
-    }
-
-    .supplier-booking {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 15px 0;
-        border-bottom: 1px solid #edf0f5;
-    }
-
-    .supplier-booking:last-child {
-        border-bottom: none;
-    }
-
-    .supplier-booking p,
-    .supplier-inquiry p {
-        margin: 5px 0 0;
-        color: #777e91;
-        font-size: 13px;
-    }
-
-    .supplier-status {
-        background: #fff2d6;
-        color: #946200;
-        padding: 5px 9px;
-        border-radius: 20px;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
-    .supplier-inquiry {
-        padding: 14px 0;
-        border-bottom: 1px solid #edf0f5;
+        color: #252b42;
     }
 
     .supplier-empty {
         color: #777e91;
         font-size: 14px;
         padding: 8px 0;
+    }
+
+    .supplier-status {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fff2d6;
+        color: #946200;
+    }
+
+    .status-confirmed {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-cancelled {
+        background: #e5e7eb;
+        color: #374151;
     }
 
     @@media (max-width: 1000px) {
@@ -172,31 +127,9 @@
         }
     }
 
-    @@media (max-width: 650px) {
-        .supplier-layout {
-            flex-direction: column;
-        }
-
-        .supplier-sidebar {
-            width: 100%;
-        }
-
-        .supplier-nav {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .supplier-main {
-            padding: 22px 16px;
-        }
-
-        .supplier-header {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
+    @@media (max-width: 500px) {
         .supplier-stats {
-            gap: 12px;
+            grid-template-columns: 1fr;
         }
 
         .supplier-card,
@@ -210,112 +143,129 @@
     }
 </style>
 
-<div class="supplier-layout">
-    <aside class="supplier-sidebar">
-        <div class="supplier-brand">Supplier Portal</div>
+<div class="container-fluid">
 
-        <nav class="supplier-nav">
-            <a asp-controller="Supplier"
-               asp-action="Index"
-               class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                Dashboard
-            </a>
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div>
+            <h1>Dashboard Overview</h1>
+            <p class="supplier-muted">
+                Welcome back! Here's what's happening with your business.
+            </p>
+        </div>
 
-            <a asp-controller="Supplier"
-               asp-action="Packages"
-               class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Packages" ? "active" : "")">
-                My Packages
-            </a>
+        <div class="supplier-profile">Supplier Account</div>
+    </header>
 
-            <a asp-controller="Supplier" asp-action="Services">
-                My Services
-            </a>
+    <!-- Dashboard Statistics -->
+    <section class="supplier-stats">
 
-            <a asp-controller="Supplier" asp-action="Bookings">
-                Bookings
-            </a>
+        <div class="supplier-card">
+            <div class="supplier-stat-label">Total Packages</div>
+            <p class="supplier-stat-value">
+                @(ViewBag.TotalPackages ?? 0)
+            </p>
+        </div>
 
-            <a asp-controller="Supplier" asp-action="Calendar">
-                Calendar
-            </a>
+        <div class="supplier-card">
+            <div class="supplier-stat-label">Active Services</div>
+            <p class="supplier-stat-value">
+                @(ViewBag.ActiveServices ?? 0)
+            </p>
+        </div>
 
-            <a asp-controller="Supplier" asp-action="Earnings">
-                Earnings
-            </a>
+        <div class="supplier-card">
+            <div class="supplier-stat-label">Total Bookings</div>
+            <p class="supplier-stat-value">
+                @(ViewBag.TotalBookings ?? 0)
+            </p>
+        </div>
 
-            <a asp-controller="Supplier" asp-action="Reviews">
-                Reviews
-            </a>
+        <div class="supplier-card">
+            <div class="supplier-stat-label">Completed Booking Value</div>
+            <p class="supplier-stat-value">
+                ₱@totalEarnings.ToString("N2")
+            </p>
+        </div>
 
-            <a asp-controller="Supplier" asp-action="Profile">
-                Profile
-            </a>
-        </nav>
-    </aside>
+    </section>
 
-    <main class="supplier-main">
-        <header class="supplier-header">
-            <div>
-                <h1>Dashboard Overview</h1>
-                <p class="supplier-muted">
-                    Welcome back! Here's what's happening with your business.
-                </p>
+    <!-- Recent Bookings and Inquiries -->
+    <section class="supplier-lower">
+
+        <div class="supplier-panel">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h2 class="mb-0">Recent Bookings</h2>
+
+                <a asp-controller="Supplier"
+                   asp-action="Bookings"
+                   class="btn btn-sm btn-outline-primary">
+                    View All
+                </a>
             </div>
 
-            <div class="supplier-profile">Supplier Account</div>
-        </header>
+            @if (recentBookings.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Customer</th>
+                                <th>Event</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
 
-        <section class="supplier-stats">
-            <div class="supplier-card">
-                <div class="supplier-stat-label">Total Packages</div>
-                <p class="supplier-stat-value">0</p>
-            </div>
+                        <tbody>
+                            @foreach (var booking in recentBookings)
+                            {
+                                var statusClass = booking.Status switch
+                                {
+                                    "Confirmed" => "status-confirmed",
+                                    "Completed" => "status-completed",
+                                    "Cancelled" => "status-cancelled",
+                                    _ => "status-pending"
+                                };
 
-            <div class="supplier-card">
-                <div class="supplier-stat-label">Active Services</div>
-                <p class="supplier-stat-value">0</p>
-            </div>
-
-            <div class="supplier-card">
-                <div class="supplier-stat-label">Total Bookings</div>
-                <p class="supplier-stat-value">0</p>
-            </div>
-
-            <div class="supplier-card">
-                <div class="supplier-stat-label">Total Earnings</div>
-                <p class="supplier-stat-value">₱0.00</p>
-            </div>
-        </section>
-
-        <section class="supplier-lower">
-            <div class="supplier-panel">
-                <h2>Recent Bookings</h2>
-
-                <div class="supplier-booking">
-                    <div>
-                        <strong>Sample Event Booking</strong>
-                        <p>Sample customer - Event package</p>
-                    </div>
-
-                    <span class="supplier-status">Pending</span>
+                                <tr>
+                                    <td>@booking.CustomerName</td>
+                                    <td>@booking.EventType</td>
+                                    <td>
+                                        @booking.EventDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        <span class="supplier-status @statusClass">
+                                            @booking.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
+            }
+            else
+            {
                 <p class="supplier-empty">
-                    This is sample data. Actual bookings will appear
-                    after the database is connected.
+                    No bookings found yet. Customer bookings will appear here
+                    when records are available in the database.
+                </p>
+            }
+        </div>
+
+        <div class="supplier-panel">
+            <h2>Inquiries</h2>
+
+            <div>
+                <strong>Customer Inquiries</strong>
+                <p class="supplier-empty">
+                    Customer questions and requests will appear here once
+                    the inquiry feature is connected to the database.
                 </p>
             </div>
+        </div>
 
-            <div class="supplier-panel">
-                <h2>Inquiries</h2>
+    </section>
 
-                <div class="supplier-inquiry">
-                    <strong>Customer Inquiries</strong>
-                    <p>Customer questions and requests will appear here.</p>
-                </div>
-
-                <p class="supplier-empty">No real inquiries yet.</p>
-            </div>
-        </section>
-    </main>
 </div>

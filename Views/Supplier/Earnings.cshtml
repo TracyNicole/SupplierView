@@ -1,0 +1,100 @@
+
+@model IEnumerable<SupplierView.Models.Booking>
+
+@{
+    ViewData["Title"] = "Earnings";
+    Layout = "~/Views/Supplier/_SupplierLayout.cshtml";
+
+    decimal totalEarnings = ViewBag.TotalEarnings ?? 0m;
+    int completedCount = ViewBag.CompletedCount ?? 0;
+    decimal pendingValue = ViewBag.PendingValue ?? 0m;
+}
+
+<div class="container-fluid">
+    <h2 class="fw-bold mb-1">Earnings</h2>
+    <p class="text-secondary mb-4">
+        Track your completed and pending booking values.
+    </p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="text-secondary mb-2">
+                        Completed Booking Value
+                    </p>
+                    <h3 class="fw-bold">
+                        ₱@totalEarnings.ToString("N2")
+                    </h3>
+                    <small class="text-secondary">
+                        @completedCount completed bookings
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="text-secondary mb-2">
+                        Pending Booking Value
+                    </p>
+                    <h3 class="fw-bold">
+                        ₱@pendingValue.ToString("N2")
+                    </h3>
+                    <small class="text-secondary">
+                        Not included in completed value
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-3">Completed Bookings</h5>
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer</th>
+                                <th>Event Date</th>
+                                <th>Package</th>
+                                <th>Booking Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model)
+                            {
+                                <tr>
+                                    <td>@booking.Id</td>
+                                    <td>@booking.CustomerName</td>
+                                    <td>
+                                        @booking.EventDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>@booking.PackageName</td>
+                                    <td>
+                                        ₱@booking.TotalPrice.ToString("N2")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <h5>No completed bookings yet</h5>
+                    <p class="text-secondary mb-0">
+                        Completed bookings will appear here when records are available.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

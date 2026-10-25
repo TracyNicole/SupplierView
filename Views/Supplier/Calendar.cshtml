@@ -1,0 +1,62 @@
+
+@model IEnumerable<SupplierView.Models.Booking>
+
+@{
+    ViewData["Title"] = "Calendar";
+    Layout = "~/Views/Supplier/_SupplierLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2 class="fw-bold mb-1">Booking Calendar</h2>
+    <p class="text-secondary mb-4">
+        View scheduled events and their dates.
+    </p>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Event Date</th>
+                                <th>Customer</th>
+                                <th>Event Type</th>
+                                <th>Package</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @booking.EventDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>@booking.CustomerName</td>
+                                    <td>@booking.EventType</td>
+                                    <td>@booking.PackageName</td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            @booking.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <h5>No scheduled events yet</h5>
+                    <p class="text-secondary">
+                        Events will appear here when booking records are available.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

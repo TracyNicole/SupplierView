@@ -1,0 +1,110 @@
+
+@model SupplierView.Models.SupplierProfile
+
+@{
+    ViewData["Title"] = "Supplier Profile";
+    Layout = "~/Views/Supplier/_SupplierLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2 class="fw-bold mb-1">Supplier Profile</h2>
+    <p class="text-secondary mb-4">
+        Manage your business information.
+    </p>
+
+    @if (TempData["ProfileMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["ProfileMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form asp-controller="Supplier"
+                  asp-action="Profile"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="BusinessName"
+                               class="form-label">Business Name</label>
+                        <input asp-for="BusinessName"
+                               class="form-control"
+                               placeholder="Enter business name" />
+                        <span asp-validation-for="BusinessName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="OwnerName"
+                               class="form-label">Owner Name</label>
+                        <input asp-for="OwnerName"
+                               class="form-control"
+                               placeholder="Enter owner name" />
+                        <span asp-validation-for="OwnerName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="EmailAddress"
+                               class="form-label">Email Address</label>
+                        <input asp-for="EmailAddress"
+                               class="form-control"
+                               placeholder="Enter email address" />
+                        <span asp-validation-for="EmailAddress"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ContactNumber"
+                               class="form-label">Contact Number</label>
+                        <input asp-for="ContactNumber"
+                               class="form-control"
+                               placeholder="Enter contact number" />
+                        <span asp-validation-for="ContactNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="BusinessAddress"
+                               class="form-label">Business Address</label>
+                        <input asp-for="BusinessAddress"
+                               class="form-control"
+                               placeholder="Enter business address" />
+                        <span asp-validation-for="BusinessAddress"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="BusinessDescription"
+                               class="form-label">About Your Business</label>
+                        <textarea asp-for="BusinessDescription"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Describe your business"></textarea>
+                        <span asp-validation-for="BusinessDescription"
+                              class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-4">
+                    Save Profile
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
